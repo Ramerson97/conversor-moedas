@@ -1,95 +1,95 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client"
+import { Button, CardImg, Form } from "react-bootstrap";
+import Pagina from "./components/Pagina";
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useState } from "react";
+import { CiCalculator1 } from "react-icons/ci";
+import { FaEuroSign } from "react-icons/fa";
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const [valor,setValor]= useState("")
+  const[moeda, setMoeda]= useState("")
+  const [resultado, setResultado]=useState(null)
+
+  const valoresConversao ={
+    dolar: 0.20,
+    euro: 0.18,
+    bitcoin: 0.000003
+  }
+function converter(event) {
+  event.preventDefault()
+
+  console.log(valor, moeda, resultado)
+    const valarConvertido = valor * valoresConversao[moeda]
+    setResultado(valarConvertido.toFixed(6))
+  }
+
+  const limpar= () => {
+    setValor(""),
+    setMoeda("dolar"),
+    setResultado(null)
+  }
+
+
+
+  return (
+    
+    <Pagina titulo={"Conversor de Moedas"}>
+
+      {/* imagem */}
+
+      <CardImg height={350} width={512} src="/img/conversor02.png"/>
+     
+     
+      {/* inclusao dos dados */}
+
+      <Form onSubmit={converter}>
+        <Form.Group>
+           <Form.Label>Digite um valor</Form.Label>
+           <Form.Control
+           type="number"
+           value={valor}
+         
+           onChange={e => {setValor(e.target.value)}}
+
+
+           />
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>Selecione a moeda</Form.Label>
+          <Form.Select
+          type="moeda"
+          value={moeda}
+          onChange={e => {setMoeda(e.target.value)}}
           >
-            <Image
-              className={styles.logo}
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            <option>Selecione</option>
+            <option value= "dolar">Dolar ($)</option>
+            <option value='euro'>Euro  (€)  <FaEuroSign /> </option>
+            <option value="bitcoin">Bitcoin (₿)</option>
+
+          </Form.Select>
+        </Form.Group>
+        <br></br>
+
+        <Form.Group className="text-center mb-3">
+          <Button type="submit" variant="success" onClick={converter}><CiCalculator1 /> Calcular</Button>
+          <Button className="btn btn-secondary ml-2 ms-2" onClick={limpar}>Limpar</Button>
+
+          {resultado !== null && (
+                <div className="mt-3">
+                    <h3>Resultado:</h3>
+                    <p>{`O valor convertido é: ${resultado} ${moeda.charAt(0).toUpperCase() + moeda.slice(1)}`}</p>
+                </div>
+            )} 
+
+        </Form.Group>
+
+      </Form>
+
+    </Pagina>
+    
   );
 }
